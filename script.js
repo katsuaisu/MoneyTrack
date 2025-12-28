@@ -1,6 +1,6 @@
 const CONVERSION_RATE = 58.71;
 
-// 1. DEFAULT STATE
+
 const defaultState = {
     wallets: [
         { name: 'Wallet', balance: 0, currency: 'PHP' },
@@ -15,7 +15,7 @@ const defaultState = {
 
 let state = { ...defaultState };
 
-// DOM Elements
+
 const totalPhpDisplay = document.getElementById('total-php');
 const totalUsdDisplay = document.getElementById('total-usd');
 const walletGrid = document.getElementById('wallet-cards');
@@ -25,40 +25,37 @@ const modal = document.getElementById('modal-overlay');
 const amountInput = document.getElementById('amount-input');
 const addBtn = document.getElementById('add-btn');
 
-// --- PERSISTENCE & SYNC (New Code) ---
 
-// Save current state to Browser LocalStorage
 function saveToLocal() {
     localStorage.setItem('financeDashboardState', JSON.stringify(state));
 }
 
-// Load from Browser LocalStorage
+
 function loadFromLocal() {
     const saved = localStorage.getItem('financeDashboardState');
     if (saved) {
         state = JSON.parse(saved);
-        // Sync toggle UI state
+        
         toggle.checked = state.useConversion; 
     }
 }
 
-// Export Data (Download JSON file)
+
 document.getElementById('backup-btn').onclick = () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
     const downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute("href", dataStr);
     downloadAnchorNode.setAttribute("download", "finance_backup.json");
-    document.body.appendChild(downloadAnchorNode); // required for firefox
+    document.body.appendChild(downloadAnchorNode); 
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
 };
 
-// Import Data (Trigger file input)
 document.getElementById('restore-btn').onclick = () => {
     document.getElementById('import-file').click();
 };
 
-// Handle File Selection
+
 document.getElementById('import-file').onchange = (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -67,10 +64,10 @@ document.getElementById('import-file').onchange = (event) => {
     reader.onload = function(e) {
         try {
             const uploadedState = JSON.parse(e.target.result);
-            // Basic validation check
+            
             if (uploadedState.wallets && uploadedState.transactions) {
                 state = uploadedState;
-                saveToLocal(); // Save the imported data immediately
+                saveToLocal(); 
                 renderUI();
                 alert("Data restored successfully!");
             } else {
@@ -81,11 +78,10 @@ document.getElementById('import-file').onchange = (event) => {
         }
     };
     reader.readAsText(file);
-    // Reset input so you can select the same file again if needed
+    
     event.target.value = '';
 };
 
-// --- CORE LOGIC ---
 
 function calculateTotals() {
     let phpOnly = 0;
@@ -140,7 +136,7 @@ function renderUI() {
     });
 
     calculateTotals();
-    // Update toggle checkbox visual state in case it changed via import
+  
     toggle.checked = state.useConversion;
 }
 
@@ -160,12 +156,12 @@ function addTransaction() {
         date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     });
 
-    saveToLocal(); // <--- Save after change
+    saveToLocal(); 
     closeModal();
     renderUI();
 }
 
-// Make deleteTransaction global so HTML can see it
+
 window.deleteTransaction = function(index) {
     const t = state.transactions[index];
     const wallet = state.wallets.find(w => w.name === t.wallet);
@@ -174,13 +170,13 @@ window.deleteTransaction = function(index) {
     
     state.transactions.splice(index, 1);
     
-    saveToLocal(); // <--- Save after change
+    saveToLocal();
     renderUI();
 }
 
 toggle.addEventListener('change', (e) => {
     state.useConversion = e.target.checked;
-    saveToLocal(); // <--- Save setting
+    saveToLocal(); 
     calculateTotals();
 });
 
@@ -196,6 +192,5 @@ function closeModal() {
 amountInput.oninput = () => addBtn.disabled = !amountInput.value;
 addBtn.onclick = addTransaction;
 
-// INITIALIZE
-loadFromLocal(); // <--- Load on startup
+loadFromLocal(); 
 renderUI();
