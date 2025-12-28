@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Rei's Finance</h2>
+            </div>
+            
+            <div class="balance-stack">
+                <div class="balance-item">
+                    <span class="label">Total Pesos</span>
+                    <h1 id="total-php">₱0.00</h1>
+                </div>
+                <div class="balance-item">
+                    <span class="label">Total Dollars</span>
+                    <h1 id="total-usd">$0.00</h1>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="toggle-row">
+                    <span>Include USD in PHP Total</span>
+                    <label class="ios-switch">
+                        <input type="checkbox" id="currency-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <p class="conversion-note">Rate: 1 USD = ₱58.71</p>
+            </div>
+
+            <div class="sidebar-section data-actions">
+                <span class="label">Data & Sync</span>
+                <div class="action-buttons">
+                    <button id="backup-btn" class="ios-text-btn">↓ Backup File</button>
+                    <button id="restore-btn" class="ios-text-btn">↑ Restore File</button>
+                    <input type="file" id="import-file" style="display: none" accept=".json">
+                </div>
+            </div>
+
+            <button class="add-btn-large" id="open-modal">Add Transaction</button>
+        </aside>
+
+        <main class="main-content">
+            <section class="section-group">
+                <h3>Wallets</h3>
+                <div class="wallet-grid" id="wallet-cards">
+                    </div>
+            </section>
+
+            <section class="section-group">
+                <h3>Recent Transactions</h3>
+                <div id="history-list" class="history-list">
+                    </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="ios-modal">
+            <div class="modal-header">
+                <button id="cancel-btn">Cancel</button>
+                <span>New Entry</span>
+                <button id="add-btn" class="bold" disabled>Add</button>
+            </div>
+            <div class="modal-body">
+                <div class="segmented-control">
+                    <input type="radio" name="type" id="expense" value="expense" checked>
+                    <label for="expense">Expense</label>
+                    <input type="radio" name="type" id="income" value="income">
+                    <label for="income">Income</label>
+                    <div class="selection-pill"></div>
+                </div>
+                <div class="input-group">
+                    <select id="wallet-select">
+                        <option value="Wallet">Wallet (PHP)</option>
+                        <option value="GCash">GCash (PHP)</option>
+                        <option value="School Ipon">School Ipon (PHP)</option>
+                        <option value="Main Ipon">Main Ipon (PHP)</option>
+                        <option value="USD Wallet">USD Wallet ($)</option>
+                    </select>
+                    <input type="number" id="amount-input" placeholder="0.00">
+                    <input type="text" id="note-input" placeholder="Note">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
